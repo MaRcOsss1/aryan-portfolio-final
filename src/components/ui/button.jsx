@@ -1,0 +1,1 @@
+import React from 'react';export const Button=({children,className,...p})=><button className={`px-4 py-2 rounded ${className}`} {...p}>{children}</button>;
