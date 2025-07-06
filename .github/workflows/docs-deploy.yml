@@ -1,0 +1,40 @@
+name: Build and Publish to docs/
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout your repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup Node and build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      # 3. Move dist/ into docs/
+      - name: Move build to docs/
+        run: |
+          rm -rf docs
+          mv dist docs
+
+      # 4. Commit docs/ back to main
+      - name: Commit docs folder
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: update published docs"
+          branch: main
+          file_pattern: docs/**
+
